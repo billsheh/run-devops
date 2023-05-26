@@ -23,6 +23,7 @@ variables:
   dockerfilePath: 'Shopping/Shopping.API/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'shoppingacr20662ab5-auth'
+  k8sNamespace: 'default'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -80,6 +81,7 @@ stages:
               connectionType: 'kubernetesServiceConnection'
               kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
               secretName: $(imagePullSecret)
+              namespace: $(k8sNamespace)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
               
           - task: KubernetesManifest@0
@@ -88,6 +90,7 @@ stages:
               action: deploy
               connectionType: 'kubernetesServiceConnection'
               kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
+              namespace: $(k8sNamespace)
               manifests: |
                 $(Pipeline.Workspace)/aks/shoppingapi.yaml
               imagePullSecrets: |
