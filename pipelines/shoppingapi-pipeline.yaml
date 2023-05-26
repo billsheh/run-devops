@@ -94,6 +94,7 @@ stages:
               namespace: $(k8sNamespace)
               manifests: |
                 $(Pipeline.Workspace)/aks/shoppingapi.yaml
+                $(Pipeline.Workspace)/aks/mongo-configmap.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
