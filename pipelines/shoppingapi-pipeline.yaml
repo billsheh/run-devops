@@ -69,6 +69,8 @@ stages:
             displayName: Create imagePullSecret
             inputs:
               action: createSecret
+              connectionType: 'kubernetesServiceConnection'
+              kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
               
@@ -76,6 +78,8 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
+              connectionType: 'kubernetesServiceConnection'
+              kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
               manifests: |
                 $(Pipeline.Workspace)/aks/shoppingapi.yaml
               imagePullSecrets: |
