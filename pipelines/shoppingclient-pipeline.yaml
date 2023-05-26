@@ -17,12 +17,13 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'e2bd5050-0b04-449c-8cd9-9367bbf7b47e'
+  dockerRegistryServiceConnection: 'b471b39a-281e-4a90-b6de-44e207b6093f'
   imageRepository: 'shoppingclient'
-  containerRegistry: 'shoppingacr.azurecr.io'
+  containerRegistry: 'rundevopstest.azurecr.io'
   dockerfilePath: 'Shopping/Shopping.Client/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'shoppingacr20662ab5-auth'
+  k8sNamespace: 'default'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -60,22 +61,37 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'aspnetrunrundevops.default'
+    environment: 'aspnetrunrundevops'
     strategy:
       runOnce:
         deploy:
           steps:
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+            displayName: Replace tokens in **/*
+            inputs:
+              rootDirectory: $(Pipeline.Workspace)/aks
+              targetFiles: '**/*.yaml'
+              keepToken: true
+              tokenPrefix: __
+              tokenSuffix: __
           - task: KubernetesManifest@0
             displayName: Create imagePullSecret
             inputs:
               action: createSecret
+              connectionType: 'kubernetesServiceConnection'
+              kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
+              secretType: 'dockerRegistry'
               secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+              namespace: $(k8sNamespace)
+              dockerRegistryEndpoint: 'rundevopstest' #$(dockerRegistryServiceConnection)
               
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
+              connectionType: 'kubernetesServiceConnection'
+              kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
+              namespace: $(k8sNamespace)
               manifests: |
                 $(Pipeline.Workspace)/aks/shoppingclient.yaml
               imagePullSecrets: |
