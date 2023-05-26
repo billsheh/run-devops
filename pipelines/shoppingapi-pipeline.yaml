@@ -89,8 +89,8 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-              #connectionType: 'kubernetesServiceConnection'
-              #kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
+              connectionType: 'kubernetesServiceConnection'
+              kubernetesServiceConnection: 'aspnetrunrundevops-rundevops-test-default-1685132343493'
               namespace: $(k8sNamespace)
               manifests: |
                 $(Pipeline.Workspace)/aks/shoppingapi.yaml
