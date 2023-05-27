@@ -14,12 +14,18 @@ namespace Shopping.API.Controllers
     [Route("[controller]")]
     public class ProductController
     {
-        private readonly ProductContext _context;
+        //private readonly ProductContext _context;
         private readonly ILogger<ProductController> _logger;
 
-        public ProductController(ProductContext context, ILogger<ProductController> logger)
+            // public ProductController(ProductContext context, ILogger<ProductController> logger)
+            // {
+            //     _context = context ?? throw new ArgumentNullException(nameof(context));
+            //     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            // }
+
+         public ProductController(ILogger<ProductController> logger)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            //_context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -27,11 +33,11 @@ namespace Shopping.API.Controllers
         public async Task<IEnumerable<Product>> Get()
         {
             return ProductContext.GetPreconfiguredProducts();
-            
-            return await _context
-                            .Products
-                            .Find(p => true)
-                            .ToListAsync();
+
+            // return await _context
+            //                 .Products
+            //                 .Find(p => true)
+            //                 .ToListAsync();
         }
 
     }
