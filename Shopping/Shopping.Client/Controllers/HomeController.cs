@@ -24,11 +24,18 @@ namespace Shopping.Client.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetAsync("/product");
-            var content = await response.Content.ReadAsStringAsync();
-            var productList = JsonConvert.DeserializeObject<IEnumerable<Product>>(content);
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _httpClient.GetAsync("/product");
+                var content = await response.Content.ReadAsStringAsync();
+                var productList = JsonConvert.DeserializeObject<IEnumerable<Product>>(content);
 
-            return View(productList);
+                return View(productList);
+            }catch(Exception ex)
+            {
+                return View(JsonConvert.SerializeObject(response?.Content));
+            }
         }
 
         public IActionResult Privacy()
