@@ -34,7 +34,7 @@ namespace Shopping.Client.Controllers
                 return View(productList);
             }catch(Exception ex)
             {
-                return ContentResult(JsonConvert.SerializeObject(response?.Content));
+                return Content(JsonConvert.SerializeObject(response?.Content));
             }
         }
 
