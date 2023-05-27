@@ -94,6 +94,7 @@ stages:
               namespace: $(k8sNamespace)
               manifests: |
                 $(Pipeline.Workspace)/aks/shoppingclient.yaml
+                $(Pipeline.Workspace)/aks/shoppingapi-configmap.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
